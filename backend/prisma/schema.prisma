@@ -1,0 +1,50 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  password     String?
+  provider     String?   
+  providerId   String?   
+  sessions     Session[]
+  createdAt    DateTime  @default(now())
+}
+
+
+model Session {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  title     String
+  chats     ChatMessage[]
+  code      ComponentSnapshot[]
+  createdAt DateTime @default(now())
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  session   Session  @relation(fields: [sessionId], references: [id])
+  sessionId String
+  role      String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model ComponentSnapshot {
+  id        String   @id @default(cuid())
+  session   Session  @relation(fields: [sessionId], references: [id])
+  sessionId String
+  jsx       String
+  css       String
+  createdAt DateTime @default(now())
+}
+
