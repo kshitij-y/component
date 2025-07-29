@@ -6,10 +6,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import GoogleAuth  from "./google";
+import GoogleAuth from "./google";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 export default function SignInPage() {
-  const { signin, loading, error } = useAuth();
+  const { signin, loading,signinWithGoogle, error } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -19,12 +21,27 @@ export default function SignInPage() {
     await signin({ email, password });
   };
 
+  const handleLoginSuccess = async (credentialResponse: any) => {
+    const token = credentialResponse.credential;
+    const decoded: any = jwtDecode(token);
+    console.log("Decoded:", decoded);
+    await signinWithGoogle(token);
+  };
+
   return (
     <div className="flex justify-center items-center">
       <Card className="bg-[#303030] border-none text-white w-[350px] shadow-lg">
         <CardContent className=" flex flex-col w-full gap-4 py-6">
           <h2 className="text-2xl font-bold text-center">Welcome back</h2>
-          <GoogleAuth />
+            <GoogleLogin
+              onSuccess={handleLoginSuccess}
+              onError={() => console.log("Login Failed")}
+              theme="filled_black"
+              size="large"
+              width="302"
+              text="continue_with"
+              shape="rectangular"
+            />
 
           <div className="text-center text-gray-400 text-sm">or</div>
 

@@ -6,10 +6,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import GoogleAuth from "./google";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 export default function SignupPage() {
-  const { signup, loading, error } = useAuth();
+  const { signup, loading,signinWithGoogle, error } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,12 +20,27 @@ export default function SignupPage() {
     await signup({ name, email, password });
   };
 
+  const handleLoginSuccess = async (credentialResponse: any) => {
+      const token = credentialResponse.credential;
+      const decoded: any = jwtDecode(token);
+      console.log("Decoded:", decoded);
+      await signinWithGoogle(token);
+    };
+
   return (
     <div className="flex justify-center items-center bg-[#212121]">
       <Card className="bg-[#303030] border-none text-white w-[350px] shadow-lg">
         <CardContent className="flex flex-col gap-4 py-6">
           <h2 className="text-2xl font-bold text-center">Create an Account</h2>
-          <GoogleAuth />
+          <GoogleLogin
+            onSuccess={handleLoginSuccess}
+            onError={() => console.log("Login Failed")}
+            theme="filled_black"
+            size="large"
+            width="302"
+            text="continue_with"
+            shape="rectangular"
+          />
           <div className="text-center text-gray-400 text-sm">or</div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-3">
