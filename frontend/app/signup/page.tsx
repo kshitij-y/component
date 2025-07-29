@@ -1,5 +1,3 @@
-"use client";
-
 import Logo from "@/components/logo";
 import SignupPage from "@/components/Signup";
 

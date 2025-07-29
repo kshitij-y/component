@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import GoogleAuth from "./google";
+import GoogleAuth  from "./google";
 
 export default function SignInPage() {
   const { signin, loading, error } = useAuth();
@@ -22,8 +22,8 @@ export default function SignInPage() {
   return (
     <div className="flex justify-center items-center">
       <Card className="bg-[#303030] border-none text-white w-[350px] shadow-lg">
-        <CardContent className="flex flex-col gap-4 py-6">
-
+        <CardContent className=" flex flex-col w-full gap-4 py-6">
+          <h2 className="text-2xl font-bold text-center">Welcome back</h2>
           <GoogleAuth />
 
           <div className="text-center text-gray-400 text-sm">or</div>

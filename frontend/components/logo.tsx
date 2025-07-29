@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { Sparkles } from 'lucide-react';
+import { useRouter } from "next/navigation";
 
 export default function Logo() {
   const [hovered, setHovered] = useState(false);
+  const router = useRouter();
 
   return (
     <div

@@ -25,6 +25,7 @@ export default function SignupPage() {
         <CardContent className="flex flex-col gap-4 py-6">
           <h2 className="text-2xl font-bold text-center">Create an Account</h2>
           <GoogleAuth />
+          <div className="text-center text-gray-400 text-sm">or</div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-3">
             <Input

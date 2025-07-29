@@ -3,22 +3,26 @@ import { jwtDecode } from "jwt-decode";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function GoogleAuth() {
-    const { signinWithGoogle } = useAuth();
-    const handleLoginSuccess = async (credentialResponse: any) => {
-      const token = credentialResponse.credential;
+  const { signinWithGoogle } = useAuth();
 
-      const decoded: any = jwtDecode(token);
-      console.log("Decoded:", decoded);
+  const handleLoginSuccess = async (credentialResponse: any) => {
+    const token = credentialResponse.credential;
+    const decoded: any = jwtDecode(token);
+    console.log("Decoded:", decoded);
+    await signinWithGoogle(token);
+  };
 
-      await signinWithGoogle(token);
-    };
-
-    return (
-      <div className="w-full">
+  return (
+    <div className="w-full">
         <GoogleLogin
           onSuccess={handleLoginSuccess}
           onError={() => console.log("Login Failed")}
+          theme="filled_black"
+          size="large"
+          width="100%"
+          text="continue_with"
+          shape="rectangular"
         />
-      </div>
-    );
+    </div>
+  );
 }
