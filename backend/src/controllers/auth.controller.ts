@@ -25,10 +25,12 @@ export const signup = async (req: Request, res: Response) => {
   const user = await prisma.user.create({ data: { name, email, password: hashed } });
 
   const token = generateToken(user.id);
+  const isProd = process.env.NODE_ENV === "production";
   res.cookie("token", token, {
     httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    maxAge: 24 * 60 * 60 * 1000, // 1 day
+    secure: isProd,
+    sameSite: isProd ? "none" : "strict",
   });
   const { id, name: username, email: userMail } = user;
 
@@ -64,10 +66,12 @@ export const signin = async (req: Request, res: Response) => {
   }
 
   const token = generateToken(user.id);
+  const isProd = process.env.NODE_ENV === "production";
   res.cookie("token", token, {
     httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    maxAge: 24 * 60 * 60 * 1000,
+    secure: isProd,
+    sameSite: isProd ? "none" : "strict",
   });
 
   const { id, name, email: userMail } = user;
@@ -151,10 +155,12 @@ export const oauthLogin = async (req: Request, res: Response) => {
   }
 
   const token = generateToken(user.id);
+  const isProd = process.env.NODE_ENV === "production";
   res.cookie("token", token, {
     httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    maxAge: 24 * 60 * 60 * 1000, // 1 day
+    secure: isProd,
+    sameSite: isProd ? "none" : "strict",
   });
 
   return sendResponse({
