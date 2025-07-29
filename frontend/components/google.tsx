@@ -14,9 +14,11 @@ export default function GoogleAuth() {
     };
 
     return (
-      <GoogleLogin
-        onSuccess={handleLoginSuccess}
-        onError={() => console.log("Login Failed")}
-      />
+      <div className="w-full">
+        <GoogleLogin
+          onSuccess={handleLoginSuccess}
+          onError={() => console.log("Login Failed")}
+        />
+      </div>
     );
 }
