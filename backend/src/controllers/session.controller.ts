@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import { sendResponse } from "../utils/sendResponse.js";
+import { sendResponse } from "../utils/sendResponse";
 
 const prisma = new PrismaClient();
 
@@ -44,7 +44,7 @@ export const getSessionById = async (req: Request, res: Response) => {
 
   const session = await prisma.session.findFirst({
     where: { id: sessionId, userId },
-    include: { chats: true, code: true },
+    include: { chats: true},
   });
 
   if (!session) {
@@ -90,4 +90,51 @@ export const updateSessionTitle = async (req: Request, res: Response) => {
     message: "Session title updated",
     data: updated,
   });
+};
+
+export const deleteSession = async (req: Request, res: Response) => {
+  const userId = (req as any).userId;
+  const sessionId = req.params.id;
+
+  try {
+    const session = await prisma.session.findUnique({
+      where: { id: sessionId },
+      select: { userId: true },
+    });
+
+    if (!session) {
+      return sendResponse({
+        res,
+        statusCode: 404,
+        success: false,
+        message: "Session not found",
+      });
+    }
+
+    if (session.userId !== userId) {
+      return sendResponse({
+        res,
+        statusCode: 403,
+        success: false,
+        message: "Unauthorized to delete this session",
+      });
+    }
+
+    await prisma.session.delete({
+      where: { id: sessionId },
+    });
+
+    return sendResponse({
+      res,
+      message: "Session deleted successfully",
+      success: true,
+    });
+  } catch (error) {
+    return sendResponse({
+      res,
+      statusCode: 500,
+      success: false,
+      message: "Failed to delete session",
+    });
+  }
 };

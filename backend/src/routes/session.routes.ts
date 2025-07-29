@@ -1,11 +1,12 @@
 import express from "express";
-import { authMiddleware } from "../middleware/auth.middleware.js";
+import { authMiddleware } from "../middleware/auth.middleware";
 import {
   createSession,
   listSessions,
   getSessionById,
   updateSessionTitle,
-} from "../controllers/session.controller.js";
+  deleteSession,
+} from "../controllers/session.controller";
 
 const router = express.Router();
 
@@ -15,5 +16,6 @@ router.post("/", createSession);
 router.get("/", listSessions);
 router.get("/:id", getSessionById);
 router.patch("/:id", updateSessionTitle);
+router.delete("/:id", deleteSession);
 
 export default router;

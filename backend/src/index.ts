@@ -3,8 +3,10 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 
-import authRoutes from "./routes/auth.route.js";
-import sessionRoutes from "./routes/session.route.js";
+import authRoutes from "./routes/auth.routes";
+import sessionRoutes from "./routes/session.routes";
+import aiRoutes from "./routes/ai.routes"
+import chatRoutes from "./routes/chat.routes"
 
 dotenv.config();
 
@@ -12,7 +14,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: process.env.CLIENT_URL || 'http://localhost:3000',
     credentials: true,
   })
 );
@@ -22,7 +24,8 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/sessions", sessionRoutes);
-// app.use('/api/chats', chatRoutes); // Add when ready
+app.use("/api/ai", aiRoutes);
+app.use("/api/chat", chatRoutes);
 
 const PORT = parseInt(process.env.PORT!);
 

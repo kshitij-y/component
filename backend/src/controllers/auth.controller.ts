@@ -3,13 +3,13 @@ import bcrypt from "bcrypt";
 import { OAuth2Client } from "google-auth-library";
 import { PrismaClient } from "@prisma/client";
 import { generateToken } from "../utils/jwt";
-import { sendResponse } from "../utils/sendResponse.js";
+import { sendResponse } from "../utils/sendResponse";
 
 const prisma = new PrismaClient();
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export const signup = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
 
   const exists = await prisma.user.findUnique({ where: { email } });
   if (exists) {
@@ -22,20 +22,21 @@ export const signup = async (req: Request, res: Response) => {
   }
 
   const hashed = await bcrypt.hash(password, 10);
-  const user = await prisma.user.create({ data: { email, password: hashed } });
+  const user = await prisma.user.create({ data: { name, email, password: hashed } });
 
   const token = generateToken(user.id);
   res.cookie("token", token, { httpOnly: true, sameSite: "lax" });
+  const { id, name: username, email: userMail } = user;
 
   return sendResponse({
     res,
     statusCode: 201,
     message: "Signup successful",
-    data: user,
+    data: { id, name: username, email: userMail },
   });
 };
 
-export const login = async (req: Request, res: Response) => {
+export const signin = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   const user = await prisma.user.findUnique({ where: { email } });
@@ -61,10 +62,13 @@ export const login = async (req: Request, res: Response) => {
   const token = generateToken(user.id);
   res.cookie("token", token, { httpOnly: true, sameSite: "lax" });
 
+  const { id, name, email: userMail } = user;
+
   return sendResponse({
     res,
     message: "Login successful",
-    data: user,
+    success: true,
+    data: {id, name, email: userMail},
   });
 };
 
@@ -72,13 +76,20 @@ export const me = async (req: Request, res: Response) => {
   const userId = (req as any).userId;
 
   const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) {
+    return sendResponse({
+      res,
+      success: false,
+      message: "no user found",
+    });
+  }
+  const { id, name, email } = user;
   return sendResponse({
     res,
     message: "User fetched successfully",
-    data: user,
+    data: { id, name, email },
   });
 };
-
 
 export const oauthLogin = async (req: Request, res: Response) => {
   const { idToken } = req.body;
@@ -139,4 +150,26 @@ export const oauthLogin = async (req: Request, res: Response) => {
     message: "OAuth login successful",
     data: user,
   });
+};
+
+export const signout = async (req: Request, res: Response) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: "lax",
+    });
+
+    return sendResponse({
+      res,
+      message: "Signout successful",
+      success: true,
+    });
+  } catch (err) {
+    return sendResponse({
+      res,
+      statusCode: 500,
+      success: false,
+      message: "Something went wrong during signout",
+    });
+  }
 };
