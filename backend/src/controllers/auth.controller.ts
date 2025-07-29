@@ -143,14 +143,18 @@ export const oauthLogin = async (req: Request, res: Response) => {
   const provider = "google";
   const providerId = payload.sub;
   const email = payload.email;
+  const name = payload.name;
 
   let user = await prisma.user.findFirst({
-    where: { provider, providerId },
+    where: { email },
   });
+  if (user) {
+    // validate if user has logged in useing id pass
+  }
 
   if (!user) {
     user = await prisma.user.create({
-      data: { email, provider, providerId },
+      data: { name, email, provider, providerId },
     });
   }
 
@@ -158,7 +162,7 @@ export const oauthLogin = async (req: Request, res: Response) => {
   const isProd = process.env.NODE_ENV === "production";
   res.cookie("token", token, {
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000, // 1 day
+    maxAge: 24 * 60 * 60 * 1000,
     secure: isProd,
     sameSite: isProd ? "none" : "strict",
   });

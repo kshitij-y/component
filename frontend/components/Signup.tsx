@@ -6,10 +6,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { FcGoogle } from "react-icons/fc";
+import GoogleAuth from "./google";
 
 export default function SignupPage() {
-  const { signup,signinWithGoogle, loading, error } = useAuth();
+  const { signup, loading, error } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,14 +24,7 @@ export default function SignupPage() {
       <Card className="bg-[#303030] border-none text-white w-[350px] shadow-lg">
         <CardContent className="flex flex-col gap-4 py-6">
           <h2 className="text-2xl font-bold text-center">Create an Account</h2>
-          <Button
-            variant="outline"
-            className="w-full flex items-center justify-center gap-2 bg-[#2c2c2c] text-white border-gray-600 hover:bg-gray-800"
-            onClick={() => signinWithGoogle}
-            disabled={loading}>
-            <FcGoogle size={20} />
-            Sign in with Google
-          </Button>
+          <GoogleAuth />
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-3">
             <Input

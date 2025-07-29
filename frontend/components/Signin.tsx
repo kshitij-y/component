@@ -5,14 +5,11 @@ import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
-
-import { GoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
+import GoogleAuth from "./google";
 
 export default function SignInPage() {
-  const { signin, signinWithGoogle, loading, error } = useAuth();
+  const { signin, loading, error } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -26,14 +23,8 @@ export default function SignInPage() {
     <div className="flex justify-center items-center">
       <Card className="bg-[#303030] border-none text-white w-[350px] shadow-lg">
         <CardContent className="flex flex-col gap-4 py-6">
-          <Button
-            variant="outline"
-            className="w-full flex items-center justify-center gap-2 bg-[#2c2c2c] text-white border-gray-600 hover:bg-gray-800"
-            // onClick={signinWithGoogle}
-            disabled={loading}>
-            <FcGoogle size={20} />
-            Sign in with Google
-          </Button>
+
+          <GoogleAuth />
 
           <div className="text-center text-gray-400 text-sm">or</div>
 

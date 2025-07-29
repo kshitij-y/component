@@ -20,6 +20,7 @@ export default function Home() {
     }
   }, [isAuthenticated, router]);
 
+
   return <div className="flex flex-col bg-[#212121] h-screen">
     <div className="flex justify-center m-10">
       <Logo />
