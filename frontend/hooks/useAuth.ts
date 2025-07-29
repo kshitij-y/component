@@ -16,8 +16,8 @@ interface Credentials {
   email: string;
   password: string;
 }
-
-const be_url = "http://localhost:4000";
+const apiUrl = process.env.NEXT_PUBLIC_API;
+const be_url = apiUrl;
 
 export const useAuth = () => {
   const dispatch = useDispatch();
@@ -91,7 +91,7 @@ export const useAuth = () => {
       if (!success) throw new Error(message || "Google Sign In failed");
 
       dispatch(loginSuccess(data));
-      router.push("/dashboard");
+      router.push("/new");
     } catch (err: any) {
       dispatch(loginFailure());
       setError(
@@ -110,7 +110,7 @@ export const useAuth = () => {
         { withCredentials: true }
       );
       dispatch(logoutAction());
-      router.push("/auth/login");
+      router.push("/signin");
     } catch (err) {
       console.error("Signout error:", err);
     }

@@ -8,6 +8,9 @@ import { Input } from "@/components/ui/input";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+
 export default function SignInPage() {
   const { signin, signinWithGoogle, loading, error } = useAuth();
   const [email, setEmail] = useState("");
@@ -26,7 +29,7 @@ export default function SignInPage() {
           <Button
             variant="outline"
             className="w-full flex items-center justify-center gap-2 bg-[#2c2c2c] text-white border-gray-600 hover:bg-gray-800"
-            onClick={signinWithGoogle}
+            // onClick={signinWithGoogle}
             disabled={loading}>
             <FcGoogle size={20} />
             Sign in with Google
@@ -67,9 +70,7 @@ export default function SignInPage() {
 
           <p className="text-gray-400 text-sm text-center">
             Don’t have an account?{" "}
-            <Link
-              href="/signup"
-              className="text-indigo-400 hover:underline">
+            <Link href="/signup" className="text-indigo-400 hover:underline">
               Sign up
             </Link>
           </p>

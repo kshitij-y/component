@@ -19,7 +19,9 @@ interface Session {
   createdAt: string;
 }
 
+
 export default function LeftSidebar() {
+  const apiUrl = process.env.NEXT_PUBLIC_API;
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -32,11 +34,11 @@ export default function LeftSidebar() {
   useEffect(() => {
     const fetchSessions = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/sessions", {
+        const response = await axios.get(`${apiUrl}/api/sessions`, {
           withCredentials: true,
         });
         setSessions(response.data.data);
-      } catch (error) {
+      } catch (error: any) {
         console.error(
           "Failed to fetch sessions:",
           error?.response?.data || error.message
@@ -51,11 +53,11 @@ export default function LeftSidebar() {
 
   const handleDelete = async (sessionId: string) => {
     try {
-      await axios.delete(`http://localhost:4000/api/sessions/${sessionId}`, {
+      await axios.delete(`${apiUrl}/api/sessions/${sessionId}`, {
         withCredentials: true,
       });
       setSessions((prev) => prev.filter((s) => s.id !== sessionId));
-    } catch (err) {
+    } catch (err: any) {
       console.error("Delete failed:", err?.response?.data || err.message);
     }
   };
@@ -63,7 +65,7 @@ export default function LeftSidebar() {
   return (
     <aside
       className={cn(
-        "h-screen bg-[#212121] text-white flex flex-col justify-between border-r border-r-[0.5px] border-r-gray-700 transition-all duration-300",
+        "h-screen bg-[#212121] text-white flex flex-col justify-between border-r-[0.5px] border-r-gray-700 transition-all duration-300",
         isOpen ? "w-64 p-4" : "w-16 items-center py-4"
       )}>
       {/* Top Section */}
@@ -141,9 +143,8 @@ export default function LeftSidebar() {
               size="icon"
               variant="ghost"
               className="text-red-500 hover:bg-red-800/10"
-              onClick={() => {
-                signout;
-              }}>
+              onClick={signout}
+            >
               <LogOut size={18} />
             </Button>
           </div>

@@ -6,6 +6,7 @@ import Logo from "./logo";
 import axios from "axios";
 
 export default function NewSession() {
+  const apiUrl = process.env.NEXT_PUBLIC_API;
   const [title, setTitle] = useState("");
   const router = useRouter();
 
@@ -14,7 +15,7 @@ export default function NewSession() {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/sessions",
+        `${apiUrl}/api/sessions`,
         { title },
         { withCredentials: true }
       );

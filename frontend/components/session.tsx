@@ -19,6 +19,7 @@ interface Session {
 }
 
 export default function Session({ sessionId }: { sessionId: string }) {
+  const apiUrl = process.env.NEXT_PUBLIC_API;
   const [session, setSession] = useState<Session | null>(null);
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
   const [prompt, setPrompt] = useState("");
@@ -31,12 +32,9 @@ export default function Session({ sessionId }: { sessionId: string }) {
     const fetchSession = async () => {
       setLoading(true);
       try {
-        const response = await fetch(
-          `http://localhost:4000/api/sessions/${sessionId}`,
-          {
-            credentials: "include",
-          }
-        );
+        const response = await fetch(`${apiUrl}/api/sessions/${sessionId}`, {
+          credentials: "include",
+        });
         if (response.ok) {
           const result = await response.json();
           console.log(result);
@@ -65,7 +63,7 @@ export default function Session({ sessionId }: { sessionId: string }) {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch(`http://localhost:4000/api/chat/generate`, {
+      const response = await fetch(`${apiUrl}/api/chat/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

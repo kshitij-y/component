@@ -1,0 +1,14 @@
+service:
+  frontend:
+    image: kshitijdock032/c-frontend:latest
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./frontend/.env
+  
+  backend:
+    image:  kshitijdock032/c-backend:latest
+    ports:
+      - "5001:5001"
+    env_file:
+      - ./backend/.env
