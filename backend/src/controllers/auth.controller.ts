@@ -25,7 +25,11 @@ export const signup = async (req: Request, res: Response) => {
   const user = await prisma.user.create({ data: { name, email, password: hashed } });
 
   const token = generateToken(user.id);
-  res.cookie("token", token, { httpOnly: true, sameSite: "lax" });
+  res.cookie("token", token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  });
   const { id, name: username, email: userMail } = user;
 
   return sendResponse({
@@ -60,7 +64,11 @@ export const signin = async (req: Request, res: Response) => {
   }
 
   const token = generateToken(user.id);
-  res.cookie("token", token, { httpOnly: true, sameSite: "lax" });
+  res.cookie("token", token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  });
 
   const { id, name, email: userMail } = user;
 
@@ -143,7 +151,11 @@ export const oauthLogin = async (req: Request, res: Response) => {
   }
 
   const token = generateToken(user.id);
-  res.cookie("token", token, { httpOnly: true, sameSite: "lax" });
+  res.cookie("token", token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  });
 
   return sendResponse({
     res,
