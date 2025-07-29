@@ -130,11 +130,9 @@ const Sandbox = ({ appCode, cssCode }: any) => {
           activeFile: "/App.js",
           visibleFiles: ["/App.js", "/styles.css"],
           externalResources: ["https://cdn.tailwindcss.com"],
-          // Performance optimizations from fast version
           recompileMode: "immediate",
           recompileDelay: 0,
           autoReload: true,
-          bundlerURL: undefined, // Use default bundler for speed
         }}>
         <div className="flex h-[calc(100vh-8rem)] border rounded-md overflow-hidden bg-white">
           {/* Left side - Code Editor */}
