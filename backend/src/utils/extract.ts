@@ -4,6 +4,6 @@ export const extract = (output: string) => {
 
   return {
     jsx: jsxMatch?.[1]?.trim() || "",
-    css: cssMatch?.[1]?.trim() || "",
+    css: cssMatch?.[1]?.trim().replace(/```$/, "") || "",
   };
 };
