@@ -81,29 +81,6 @@ const Sandbox = ({ appCode, cssCode }: any) => {
   const files = {
     "/App.js": finalAppCode,
     "/styles.css": finalCssCode,
-    "/public/index.html": `<!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="utf-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <title>React Playground</title>
-            <link href="/styles.css" rel="stylesheet" />
-        </head>
-        <body>
-            <div id="root"></div>
-        </body>
-        </html>`,
-    "/tailwind.config.js": `module.exports = {
-        purge: [],
-        darkMode: false,
-        theme: {
-            extend: {},
-        },
-        variants: {
-            extend: {},
-        },
-        plugins: [],
-        }`,
   };
 
   return (
@@ -146,7 +123,6 @@ const Sandbox = ({ appCode, cssCode }: any) => {
                 height: "100%",
                 fontSize: "14px",
               }}
-              // Performance optimizations
               extensions={[]}
               readOnly={false}
             />
@@ -159,7 +135,6 @@ const Sandbox = ({ appCode, cssCode }: any) => {
               showOpenInCodeSandbox={false}
               showRefreshButton={true}
               showNavigator={false}
-              // Performance optimizations
               startRoute="/"
               showRestartButton={false}
             />
